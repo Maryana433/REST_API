@@ -1,0 +1,65 @@
+ADMIN
+- have access to user list
+- can delete users
+- can change role/name/surname
+
+//https://www.bezkoder.com/spring-boot-jwt-authentication/
+
+
+
+HTTP codes in app:
+
+* Method not allowed - zwraca automatycznie serwer
+
+* Unauthorized, Forbidden
+
+    //https://mkyong.com/spring-boot/spring-rest-validation-example/
+    //https://zetcode.com/springboot/controlleradvice/
+* Validation failure - bad request
+
+                        AuthController
+    https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-p2-semantics-18#section-7.4.10
+*registration - 200/409 - success/login is already taken
+
+    https://stackoverflow.com/questions/45357111/what-status-code-should-a-rest-api-return-for-login-requests-performed-with-wron
+*login - 200/401 - success/
+
+
+                        User
+get users/{id} -
+
+
+
+
+Code HTTP:
+
+401 Unauthorized - AuthEntryPointJwt
+403 Forbidden - CustomForbidden
+400 Bad Request - ValidationExceptionHandler/NotFound
+
+
+
+200 OK
+The request succeeded. The result meaning of "success" depends on the HTTP method:
+GET: The resource has been fetched and transmitted in the message body.
+HEAD: The representation headers are included in the response without any message body.
+PUT or POST: The resource describing the result of the action is transmitted in the message body.
+TRACE: The message body contains the request message as received by the server.
+
+201 Created
+The request succeeded, and a new resource was created as a result. This is typically the response sent after POST requests, or some PUT requests.
+
+400 Bad Request
+Код состояния ответа "HTTP 400 Bad Request" указывает, что сервер не смог понять запрос из-за недействительного синтаксиса. Клиент не должен повторять этот запрос без изменений.
+
+
++401 Unauthorized
+Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the client must authenticate itself to get the requested response
+
+
++403 Forbidden
+The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource. Unlike 401 Unauthorized, the client's identity is known to the server.
+
+
+404 Not Found
+The server cannot find the requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 Forbidden to hide the existence of a resource from an unauthorized client. This response code is probably the most well known due to its frequent occurrence on the web.
