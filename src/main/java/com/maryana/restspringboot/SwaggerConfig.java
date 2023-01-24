@@ -26,7 +26,10 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo(){
         return new ApiInfo("Book API",
-                "REST Project",
+                "REST API.\n" +
+                        "AuthController - User can log in and get JWT token or create an account.\n" +
+                        "BookController - Every registered user has his own list of books. User can get all books/get book by id , delete book or add new book.\n" +
+                        "UserController - Users with role ADMIN have access to list of all users. They can get list of users/ user by id, delete user or update user info.",
                 "1.0.0",
                 "",
                 new Contact("Maryana","","marmar72@st.amu.edu.pl"),

@@ -33,7 +33,7 @@ public class BookController {
 
 
     @GetMapping
-    @ApiOperation(value="Find all books of USER",notes = "Information about books of user")
+    @ApiOperation(value="Find all books",notes = "Information about books of registered user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of user's books"),
             @ApiResponse(code = 401, message = "Unauthorized")
@@ -45,7 +45,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value="Find book of USER by id",notes = "Information about book of user")
+    @ApiOperation(value="Find book by id",notes = "Information about book of registered user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Information about user's book"),
             @ApiResponse(code = 401, message = "Unauthorized"),
@@ -63,7 +63,7 @@ public class BookController {
     }
 
     @PostMapping
-    @ApiOperation(value="Add new book",notes = "User can add new book")
+    @ApiOperation(value="Add new book",notes = "User can add new book to his list")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Book was added. Location header contains path to new book"),
             @ApiResponse(code = 401, message = "Unauthorized"),
@@ -85,7 +85,7 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value="Delete book from list",notes = "User can delete book")
+    @ApiOperation(value="Delete book from list",notes = "User can delete book from his list")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Book was deleted"),
             @ApiResponse(code = 401, message = "Unauthorized"),

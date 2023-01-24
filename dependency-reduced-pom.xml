@@ -11,7 +11,7 @@
   <artifactId>RESTSPRINGBOOT</artifactId>
   <name>RESTSPRINGBOOT</name>
   <version>0.0.1-SNAPSHOT</version>
-  <description>Demo project for Spring Boot</description>
+  <description>Project REST API</description>
   <build>
     <plugins>
       <plugin>

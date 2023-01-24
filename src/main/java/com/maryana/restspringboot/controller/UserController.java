@@ -5,10 +5,7 @@ import com.maryana.restspringboot.dto.UserRequest;
 import com.maryana.restspringboot.dto.UserResponse;
 import com.maryana.restspringboot.exception_handler.NotFound;
 import com.maryana.restspringboot.service.UserService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -30,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("")
-    @ApiOperation(value="Find all USERS",notes = "Information about users")
+    @ApiOperation(value="Find all users",notes = "Information about users")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Users were successfully found"),
             @ApiResponse(code = 401, message = "Unauthorized"),
@@ -43,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value="Find USER by id",notes = "Information about user")
+    @ApiOperation(value="Find user by id",notes = "Information about user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "User was found"),
             @ApiResponse(code = 401, message = "Unauthorized"),
