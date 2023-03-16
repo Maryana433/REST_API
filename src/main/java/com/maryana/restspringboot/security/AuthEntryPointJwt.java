@@ -22,7 +22,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException, ServletException {
         logger.error("Unauthorized error: {}", authException.getMessage());
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized. This path requires authorization." +
-                "1. You can register here - /api/auth/signup or login here - /api/auth/signin.  "+
+                "1. You can register here - /api/auth/signup or login here - /api/auth/signin . "+
                 "2. Your JWT Token was expired or not valid.");
     }
 }

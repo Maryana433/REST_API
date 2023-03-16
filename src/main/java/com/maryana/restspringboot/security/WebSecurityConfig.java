@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.headers().frameOptions().disable().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .accessDeniedHandler(customForbidden)
                 .and()
@@ -75,7 +75,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                  .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/books/**").hasAnyRole("USER","ADMIN")
                 .antMatchers("/api/users/**").hasRole("ADMIN") // only admin has access to user list
-                .antMatchers("/swagger-ui").permitAll()
+                .antMatchers("/api/books/favourites/**").hasAnyRole("USER", "ADMIN")
+                //.antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

@@ -3,6 +3,7 @@ package com.maryana.restspringboot.controller;
 import com.maryana.restspringboot.dto.SimpleResponse;
 import com.maryana.restspringboot.dto.UserRequest;
 import com.maryana.restspringboot.dto.UserResponse;
+import com.maryana.restspringboot.exception_handler.Conflict;
 import com.maryana.restspringboot.exception_handler.NotFound;
 import com.maryana.restspringboot.service.UserService;
 import io.swagger.annotations.*;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -47,13 +49,13 @@ public class UserController {
             @ApiResponse(code = 403, message = "Forbidden. Role ADMIN is required"),
             @ApiResponse(code = 404, message = "User with this id doesn't exist"),})
     public HttpEntity<? extends Object> getUserById(@ApiParam(value = "unique id of user",example = "1")
-                                                @PathVariable int id)  {
+                                                @PathVariable Long id)  {
 
         UserResponse user = null;
         try {
             user = userService.findUserById(id);
         }catch (NotFound e){
-            return new ResponseEntity<SimpleResponse>(new SimpleResponse("User with id [ "+id+" ] not found ."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new SimpleResponse("User with id [ "+id+" ] not found ."), HttpStatus.NOT_FOUND);
         }
 
         return ResponseEntity.ok(user);
@@ -68,13 +70,17 @@ public class UserController {
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden. Role ADMIN is required"),
             @ApiResponse(code = 404, message = "User with this id doesn't exist"),})
-    public ResponseEntity<? extends Object> updateUser(@PathVariable  int id , @Valid @RequestBody UserRequest user){
+    public ResponseEntity<? extends Object> updateUser(@PathVariable  Long id , @Valid @RequestBody UserRequest user){
 
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
         UserResponse updatedUser = null;
         try {
-            updatedUser = userService.updateUser(user, id);
+            updatedUser = userService.updateUser(user, id, login);
         }catch (NotFound e){
-            return new ResponseEntity<SimpleResponse>(new SimpleResponse("User with id [ "+id+" ] not found or role not found. Available roles - ROLE_USER, ROLE_ADMIN"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new SimpleResponse("User with id [ "+id+" ] not found or role not found. Available roles - ROLE_USER, ROLE_ADMIN"), HttpStatus.NOT_FOUND);
+        }catch (Conflict c){
+            return new ResponseEntity<>(new SimpleResponse("You cannot delete ROLE_ADMIN from your role list"),
+                    HttpStatus.CONFLICT);
         }
         return ResponseEntity.ok(updatedUser);
     }
@@ -86,14 +92,20 @@ public class UserController {
             @ApiResponse(code = 200, message = "User was deleted"),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden. Role ADMIN is required"),
-            @ApiResponse(code = 404, message = "User with this id doesn't exist")})
-    public ResponseEntity<? extends Object> deleteUser(@PathVariable int id){
+            @ApiResponse(code = 404, message = "User with this id doesn't exist"),
+            @ApiResponse(code = 409, message = "You cannot delete your account")})
+    public ResponseEntity<? extends Object> deleteUser(@PathVariable Long id){
 
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-            userService.deleteUser(id);
+            userService.deleteUser(id, login);
         }catch (NotFound e){
-            return new ResponseEntity<SimpleResponse>(new SimpleResponse("User with id [ "+id+" ] not found ."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new SimpleResponse("User with id [ "+id+" ] not found ."), HttpStatus.NOT_FOUND);
+        }catch (Conflict c){
+            return new ResponseEntity<>(new SimpleResponse("You cannot delete your account"),
+                    HttpStatus.CONFLICT);
         }
+
         return ResponseEntity.ok("User with id = "+id+" was deleted");
     }
 

@@ -1,20 +1,19 @@
 package com.maryana.restspringboot.dto;
 
 import java.util.List;
-import java.util.Set;
 
 public class JwtResponse {
 
     private String token;
 
-    private int id;
+    private Long id;
 
     private String username;
 
     private List<String> roles;
 
 
-    public JwtResponse(String jwt, int  id, String username, List<String> roles) {
+    public JwtResponse(String jwt, Long  id, String username, List<String> roles) {
         this.token = jwt;
         this.id = id;
         this.username = username;
@@ -29,11 +28,11 @@ public class JwtResponse {
         this.token = token;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

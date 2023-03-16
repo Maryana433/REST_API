@@ -1,6 +1,9 @@
 package com.maryana.restspringboot.entity;
 
+import com.maryana.restspringboot.dto.BookRequest;
+
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
@@ -9,7 +12,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "title")
     private String title;
@@ -17,28 +20,36 @@ public class Book {
     @Column(name = "author")
     private String author;
 
-    @Column(name = "year_of_publicaion")
-    private int yearOfPublication;
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private User user;
 
-    public Book(int id, String title, String author, int yearOfPublication) {
+    public Book(Long id, String title, String author) {
         this.id = id;
         this.title = title;
         this.author = author;
-        this.yearOfPublication = yearOfPublication;
+    }
+
+    public Book(BookRequest request){
+        this.setAuthor(request.getAuthor());
+        this.setTitle(request.getTitle());
+        this.setDeleted(false);
     }
 
     public Book() {
 
     }
 
-    public int getId() {
+    public Book(String title, String author) {
+            this.title = title;
+            this.author = author;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -58,12 +69,12 @@ public class Book {
         this.author = author;
     }
 
-    public int getYearOfPublication() {
-        return yearOfPublication;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setYearOfPublication(int yearOfPublication) {
-        this.yearOfPublication = yearOfPublication;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     @Override
@@ -72,8 +83,19 @@ public class Book {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", yearOfPublication=" + yearOfPublication +
-                ", user=" + user +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return id.equals(book.id) && title.equals(book.title) && author.equals(book.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, author);
     }
 }

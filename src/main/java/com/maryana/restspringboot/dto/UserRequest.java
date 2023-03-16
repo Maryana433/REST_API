@@ -1,8 +1,15 @@
 package com.maryana.restspringboot.dto;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.*;
 import java.util.Set;
 
+@Builder
+@Getter
+@Setter
 public class UserRequest {
 
     @NotBlank(message = "name cannot be empty")
@@ -15,28 +22,4 @@ public class UserRequest {
     @Size(min=1)
     private Set<String> roles;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
-    }
 }

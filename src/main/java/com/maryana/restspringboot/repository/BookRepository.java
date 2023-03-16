@@ -1,17 +1,25 @@
 package com.maryana.restspringboot.repository;
 
 import com.maryana.restspringboot.entity.Book;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Integer> {
+public interface BookRepository extends PagingAndSortingRepository<Book, Long> {
 
-    @Modifying
-    @Transactional
-    @Query("delete from Book b where b.id=:bookID")
-    void remove(int bookID);
+
+    List<Book> findByIsDeletedFalse();
+
+    Page<Book> findByIsDeletedFalse(Pageable pageable);
+
+    Page<Book> findByIsDeletedFalseAndTitleContaining(String title, Pageable pageable);
+    Page<Book> findByIsDeletedFalseAndAuthorContaining(String author, Pageable pageable);
+    Page<Book> findByIsDeletedFalseAndTitleContainingAndAuthorContaining(String title,String author, Pageable pageable);
+
+
+
 }

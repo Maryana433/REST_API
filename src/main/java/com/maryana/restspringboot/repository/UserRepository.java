@@ -11,12 +11,12 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Transactional
     @Query("delete from User u where u.id=:idUser")
-    void deleteUser(@Param("idUser") int id);
+    void deleteUser(@Param("idUser") Long id);
 
 
     Optional<User> findByLogin(String login);

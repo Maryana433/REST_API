@@ -25,7 +25,7 @@ public class UserService {
     private final BookRepository bookRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository,BookRepository bookRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BookRepository bookRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bookRepository = bookRepository;
@@ -36,7 +36,7 @@ public class UserService {
                 collect(Collectors.toList());
     }
 
-    public UserResponse findUserById(int id){
+    public UserResponse findUserById(Long id) throws NotFound {
         return new UserResponse(userRepository.findById(id).orElseThrow(()->
                 new NotFound("User with id "+id+" not found . ")));
     }
@@ -45,11 +45,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public UserResponse updateUser(UserRequest user, int id){
+    public UserResponse updateUser(UserRequest user, Long id, String login) throws NotFound, Conflict {
 
         // get User from DB
         User userDB = userRepository.findById(id).orElseThrow(()->
                 new NotFound("User with id : "+id+" not found . "));
+
+        Long userId = userRepository.findByLogin(login).get().getId();
+
+        if(id.equals(userId) && !user.getRoles().contains("ROLE_ADMIN")){
+            throw new Conflict("You cannot delete ROLE_ADMIN from your role list");
+        }
 
         // update
         userDB.setName(user.getName());
@@ -78,14 +84,21 @@ public class UserService {
         return new UserResponse(updatedUser);
     }
 
-    public void deleteUser(int id){
+    public void deleteUser(Long id, String userLogin) throws NotFound, Conflict {
+
+        Long userId = userRepository.findByLogin(userLogin).get().getId();
+
+        if(userId.equals(id)){
+            throw new Conflict("You cannot delete your account");
+        }
 
         if(userRepository.findById(id).isEmpty()){
             throw new NotFound("User with id : "+id+" not found . ");
         }
 
+
         // first delete all resources of user
-        for(Book book: userRepository.findById(id).get().getBooks()){
+        for(Book book: userRepository.findById(id).get().getFavouriteBooks()){
             bookRepository.delete(book);
         }
 
@@ -93,12 +106,22 @@ public class UserService {
         userRepository.deleteUser(id);
     }
 
-    public User getUserByLogin(String login){
+    public User getUserByLogin(String login) throws NotFound {
         return userRepository.findByLogin(login).orElseThrow( ()->
-                new NotFound("User with login : "+login+" not found . "));
+                new NotFound("User with login [ "+login+" ] not found . "));
     }
 
-    public List<Book> getUserBooks(String login){
-        return new ArrayList<>(getUserByLogin(login).getBooks());
+    public Set<Book> getUserBooks(String loginOfUser) {
+        Set<Book> books = null;
+        try{
+            books = getUserByLogin(loginOfUser).getFavouriteBooks();
+        }catch (NotFound n){
+            throw new RuntimeException(n);
+        }
+        return books;
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 }

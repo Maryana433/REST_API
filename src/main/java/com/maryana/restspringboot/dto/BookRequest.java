@@ -1,7 +1,5 @@
 package com.maryana.restspringboot.dto;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 public class BookRequest {
@@ -12,15 +10,10 @@ public class BookRequest {
     @NotBlank(message = "author cannot be empty")
     private String author;
 
-    @Min(value = 1500, message = "yearOfPublication should be between 1500 and 2023")
-    @Max(2023)
-    private int yearOfPublication;
 
-
-    public BookRequest(String title, String author, int yearOfPublication) {
+    public BookRequest(String title, String author) {
         this.title = title;
         this.author = author;
-        this.yearOfPublication = yearOfPublication;
     }
 
     public BookRequest() {
@@ -43,20 +36,11 @@ public class BookRequest {
         this.author = author;
     }
 
-    public int getYearOfPublication() {
-        return yearOfPublication;
-    }
-
-    public void setYearOfPublication(int yearOfPublication) {
-        this.yearOfPublication = yearOfPublication;
-    }
-
     @Override
     public String toString() {
         return "BookRequest{" +
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", yearOfPublication=" + yearOfPublication +
                 '}';
     }
 }
