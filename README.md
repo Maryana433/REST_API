@@ -11,6 +11,6 @@ do swojej listy/usunięcie książki z listy.
 Użytkownik z rolą ADMIN dodatkowo ma dostęp do listy użytkowników, może zmienić dane użytkownika, usunąc użytkownika
 i dodatkowo może dodawać książki do wspólnej listy.
 
-GCP : https://rest-375310.lm.r.appspot.com
-Dokumentacja Swagger UI: https://rest-375310.lm.r.appspot.com/swagger-ui/#/
+GCP : https://book-rest-api-2.lm.r.appspot.com
+Dokumentacja Swagger UI: https://book-rest-api-2.lm.r.appspot.com/swagger-ui/
 
